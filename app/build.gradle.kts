@@ -8,9 +8,11 @@ plugins {
 
 android {
     compileSdk = 37
+    val signingProps = file("../signing.properties")
 
     defaultConfig {
-        applicationId = "helium314.keyboard"
+        //applicationId = "helium314.keyboard"
+        applicationId = "com.touchtype.swiftkey"
         minSdk = 21
         targetSdk = 37
         versionCode = 4101
@@ -28,6 +30,15 @@ android {
             isShrinkResources = false
             isDebuggable = false
             isJniDebuggable = false
+            signingConfig = if (signingProps.exists()) {
+                val props = `java.util`.Properties().apply { load(signingProps.reader()) }
+                signingConfigs.create("release") {
+                    storeFile = file(props.getProperty("storeFile"))
+                    storePassword = props.getProperty("storePassword")
+                    keyAlias = props.getProperty("keyAlias")
+                    keyPassword = props.getProperty("keyPassword")
+                }
+            } else signingConfigs.getByName("debug")
         }
         create("nouserlib") { // same as release, but does not allow the user to provide a library
             isMinifyEnabled = true
