@@ -63,6 +63,7 @@ android {
             isJniDebuggable = false
             signingConfig = signingConfigs.getByName("debug")
             applicationIdSuffix = ".debug"
+            isDefault = true
         }
 
         androidComponents.onVariants { variant: ApplicationVariant ->
